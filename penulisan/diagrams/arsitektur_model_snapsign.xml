@@ -1,0 +1,243 @@
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <!-- ══════ TITLE ══════ -->
+    <mxCell id="t1" value="Arsitektur Model SnapSign v10 — MobileNetV2 + TSM + CBAM" style="text;html=1;fillColor=#1F3864;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=13;align=center;verticalAlign=middle;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="20" y="15" width="1000" height="44" as="geometry"/>
+    </mxCell>
+
+    <!-- ══════ KOLOM HEADER LABELS ══════ -->
+    <mxCell id="lbl_flow" value="ALUR FORWARD PASS" style="text;html=1;strokeColor=none;fillColor=none;fontStyle=3;fontSize=9;fontColor=#555555;align=center;" vertex="1" parent="1">
+      <mxGeometry x="310" y="68" width="240" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="lbl_shape" value="DIMENSI TENSOR" style="text;html=1;strokeColor=none;fillColor=none;fontStyle=3;fontSize=9;fontColor=#555555;align=center;" vertex="1" parent="1">
+      <mxGeometry x="580" y="68" width="160" height="16" as="geometry"/>
+    </mxCell>
+    <mxCell id="lbl_detail" value="DETAIL MODUL" style="text;html=1;strokeColor=none;fillColor=none;fontStyle=3;fontSize=9;fontColor=#555555;align=center;" vertex="1" parent="1">
+      <mxGeometry x="790" y="68" width="220" height="16" as="geometry"/>
+    </mxCell>
+
+    <!-- ══════ INPUT ══════ -->
+    <mxCell id="n_input" value="&lt;b&gt;Input Video Clip&lt;/b&gt;&lt;br&gt;16 frame isyarat (224 × 224)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;size=15;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="310" y="90" width="240" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="sh_input" value="[B × 16, 3, 224, 224]" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=center;fontSize=10;fontStyle=2;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="103" width="160" height="30" as="geometry"/>
+    </mxCell>
+
+    <!-- ══════ CONV AWAL ══════ -->
+    <mxCell id="n_conv1" value="&lt;b&gt;Conv2d Awal&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;3×3 Conv  |  stride=2  |  32 filter&lt;br&gt;BatchNorm + ReLU6&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="310" y="205" width="240" height="62" as="geometry"/>
+    </mxCell>
+    <mxCell id="sh_conv1" value="[B×16, 32, 112, 112]" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=center;fontSize=10;fontStyle=2;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="220" width="160" height="30" as="geometry"/>
+    </mxCell>
+
+    <!-- ══════ INVERTED RESIDUAL + TSM CONTAINER ══════ -->
+    <mxCell id="bg_invres" value="Inverted Residual Blocks + TSM" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#F3E5F5;strokeColor=#7030A0;fontStyle=1;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+      <mxGeometry x="290" y="330" width="280" height="445" as="geometry"/>
+    </mxCell>
+
+    <!-- 7 Block stages inside container -->
+    <mxCell id="ir1" value="&lt;b&gt;Stage 1&lt;/b&gt; — t=1, c=16, n=1, s=1&lt;br&gt;&lt;font style=&quot;font-size:9px;&quot;&gt;+ TSM shift&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="300" y="365" width="260" height="42" as="geometry"/>
+    </mxCell>
+    <mxCell id="ir2" value="&lt;b&gt;Stage 2&lt;/b&gt; — t=6, c=24, n=2, s=2&lt;br&gt;&lt;font style=&quot;font-size:9px;&quot;&gt;+ TSM shift&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="300" y="418" width="260" height="42" as="geometry"/>
+    </mxCell>
+    <mxCell id="ir3" value="&lt;b&gt;Stage 3&lt;/b&gt; — t=6, c=32, n=3, s=2&lt;br&gt;&lt;font style=&quot;font-size:9px;&quot;&gt;+ TSM shift&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="300" y="471" width="260" height="42" as="geometry"/>
+    </mxCell>
+    <mxCell id="ir4" value="&lt;b&gt;Stage 4&lt;/b&gt; — t=6, c=64, n=4, s=2&lt;br&gt;&lt;font style=&quot;font-size:9px;&quot;&gt;+ TSM shift&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="300" y="524" width="260" height="42" as="geometry"/>
+    </mxCell>
+    <mxCell id="ir5" value="&lt;b&gt;Stage 5&lt;/b&gt; — t=6, c=96, n=3, s=1&lt;br&gt;&lt;font style=&quot;font-size:9px;&quot;&gt;+ TSM shift&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="300" y="577" width="260" height="42" as="geometry"/>
+    </mxCell>
+    <mxCell id="ir6" value="&lt;b&gt;Stage 6&lt;/b&gt; — t=6, c=160, n=3, s=2&lt;br&gt;&lt;font style=&quot;font-size:9px;&quot;&gt;+ TSM shift&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="300" y="630" width="260" height="42" as="geometry"/>
+    </mxCell>
+    <mxCell id="ir7" value="&lt;b&gt;Stage 7&lt;/b&gt; — t=6, c=320, n=1, s=1&lt;br&gt;&lt;font style=&quot;font-size:9px;&quot;&gt;+ TSM shift&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#9673A6;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="300" y="683" width="260" height="42" as="geometry"/>
+    </mxCell>
+
+    <!-- Tensor shapes for inverted residual stages -->
+    <mxCell id="sh_ir1" value="[B×16, 16, 112, 112]" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=center;fontSize=10;fontStyle=2;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="377" width="160" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="sh_ir2" value="[B×16, 24, 56, 56]" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=center;fontSize=10;fontStyle=2;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="430" width="160" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="sh_ir3" value="[B×16, 32, 28, 28]" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=center;fontSize=10;fontStyle=2;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="483" width="160" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="sh_ir4" value="[B×16, 64, 14, 14]" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=center;fontSize=10;fontStyle=2;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="536" width="160" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="sh_ir5" value="[B×16, 96, 14, 14]" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=center;fontSize=10;fontStyle=2;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="589" width="160" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="sh_ir6" value="[B×16, 160, 7, 7]" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=center;fontSize=10;fontStyle=2;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="642" width="160" height="22" as="geometry"/>
+    </mxCell>
+    <mxCell id="sh_ir7" value="[B×16, 320, 7, 7]" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=center;fontSize=10;fontStyle=2;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="695" width="160" height="22" as="geometry"/>
+    </mxCell>
+
+    <!-- ══════ CONV AKHIR BACKBONE ══════ -->
+    <mxCell id="n_conv2" value="&lt;b&gt;Conv2d Akhir Backbone&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;1×1 Conv  |  1280 filter&lt;br&gt;BatchNorm + ReLU6&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="310" y="840" width="240" height="62" as="geometry"/>
+    </mxCell>
+    <mxCell id="sh_conv2" value="[B×16, 1280, 7, 7]" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=center;fontSize=10;fontStyle=2;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="858" width="160" height="30" as="geometry"/>
+    </mxCell>
+
+    <!-- ══════ CBAM CONTAINER ══════ -->
+    <mxCell id="bg_cbam" value="CBAM — Convolutional Block Attention Module" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#F3E5F5;strokeColor=#7030A0;fontStyle=1;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+      <mxGeometry x="290" y="965" width="280" height="160" as="geometry"/>
+    </mxCell>
+    <mxCell id="cbam_ch" value="&lt;b&gt;Channel Attention&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;AvgPool + MaxPool → MLP (r=16)&lt;br&gt;→ Sigmoid → skala channel&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#7030A0;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="298" y="1000" width="260" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="cbam_sp" value="&lt;b&gt;Spatial Attention&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;Concat(AvgPool, MaxPool) → Conv 7×7&lt;br&gt;→ Sigmoid → skala spasial&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#7030A0;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="298" y="1065" width="260" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="sh_cbam" value="[B×16, 1280, 7, 7]" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=center;fontSize=10;fontStyle=2;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="1030" width="160" height="30" as="geometry"/>
+    </mxCell>
+
+    <!-- ══════ TEMPORAL MEAN POOLING ══════ -->
+    <mxCell id="n_temp" value="&lt;b&gt;Temporal Mean Pooling&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;Rata-rata fitur 16 frame → 1 representasi&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="310" y="1195" width="240" height="58" as="geometry"/>
+    </mxCell>
+    <mxCell id="sh_temp" value="[B, 1280, 7, 7]" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=center;fontSize=10;fontStyle=2;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="1213" width="160" height="25" as="geometry"/>
+    </mxCell>
+
+    <!-- ══════ GLOBAL AVERAGE POOLING ══════ -->
+    <mxCell id="n_gap" value="&lt;b&gt;Global Average Pooling&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;Rata-rata spasial H×W → vektor fitur&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="310" y="1315" width="240" height="58" as="geometry"/>
+    </mxCell>
+    <mxCell id="sh_gap" value="[B, 1280]" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=center;fontSize=10;fontStyle=2;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="1333" width="160" height="25" as="geometry"/>
+    </mxCell>
+
+    <!-- ══════ DROPOUT ══════ -->
+    <mxCell id="n_drop" value="&lt;b&gt;Dropout&lt;/b&gt;  (p = 0.2)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="310" y="1433" width="240" height="45" as="geometry"/>
+    </mxCell>
+
+    <!-- ══════ LINEAR FC ══════ -->
+    <mxCell id="n_fc" value="&lt;b&gt;Fully Connected (Linear)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;1280 → 24&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="310" y="1538" width="240" height="55" as="geometry"/>
+    </mxCell>
+    <mxCell id="sh_fc" value="[B, 24]" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=center;fontSize=10;fontStyle=2;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="1554" width="160" height="25" as="geometry"/>
+    </mxCell>
+
+    <!-- ══════ OUTPUT ══════ -->
+    <mxCell id="n_out" value="&lt;b&gt;Output — 24 Kelas BISINDO&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;Softmax → probabilitas tiap kelas&lt;br&gt;Argmax → label + confidence&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="300" y="1660" width="260" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="sh_out" value="[B, 24] probabilitas" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=center;fontSize=10;fontStyle=2;rounded=1;" vertex="1" parent="1">
+      <mxGeometry x="580" y="1682" width="160" height="25" as="geometry"/>
+    </mxCell>
+
+    <!-- ══════ DETAIL BOX: TSM ══════ -->
+    <mxCell id="bg_tsm" value="Detail: Temporal Shift Module (TSM)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontStyle=1;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+      <mxGeometry x="790" y="340" width="230" height="250" as="geometry"/>
+    </mxCell>
+    <mxCell id="tsm1" value="Input Fitur: [B, T, C, H, W]&lt;br&gt;T = 16 frame" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBDD;strokeColor=#D6B656;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="798" y="375" width="214" height="40" as="geometry"/>
+    </mxCell>
+    <mxCell id="tsm2" value="Bagi channel C menjadi 3 bagian:&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;• C/8 channel → geser ke depan (frame t-1)&lt;br&gt;• C/8 channel → geser ke belakang (frame t+1)&lt;br&gt;• 6C/8 channel → tidak digeser&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBDD;strokeColor=#D6B656;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="798" y="425" width="214" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="tsm3" value="Concat + Reshape kembali&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;→ Informasi temporal tersebar di channel&lt;br&gt;→ 2D Conv biasa cukup menangkap gerak&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBDD;strokeColor=#D6B656;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="798" y="515" width="214" height="60" as="geometry"/>
+    </mxCell>
+
+    <!-- ══════ DETAIL BOX: CBAM ══════ -->
+    <mxCell id="bg_cbam_detail" value="Detail: CBAM" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#F3E5F5;strokeColor=#7030A0;fontStyle=1;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+      <mxGeometry x="790" y="965" width="230" height="260" as="geometry"/>
+    </mxCell>
+    <mxCell id="cbam_d1" value="&lt;b&gt;Channel Attention:&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;F_in → AvgPool(H,W) → MLP&lt;br&gt;F_in → MaxPool(H,W) → MLP&lt;br&gt;Sum → Sigmoid → M_c&lt;br&gt;F_out = F_in ⊗ M_c&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#7030A0;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="798" y="1000" width="214" height="90" as="geometry"/>
+    </mxCell>
+    <mxCell id="cbam_d2" value="&lt;b&gt;Spatial Attention:&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot;&gt;F_c → AvgPool(C) + MaxPool(C)&lt;br&gt;Concat → Conv 7×7 → Sigmoid → M_s&lt;br&gt;F_out = F_c ⊗ M_s&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#7030A0;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="798" y="1100" width="214" height="80" as="geometry"/>
+    </mxCell>
+    <mxCell id="cbam_d3" value="&lt;font style=&quot;font-size:9px&quot;&gt;Output: fitur yang diperkuat secara&lt;br&gt;channel &lt;b&gt;dan&lt;/b&gt; spasial sekaligus&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#7030A0;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="798" y="1190" width="214" height="30" as="geometry"/>
+    </mxCell>
+
+    <!-- ══════ DETAIL BOX: INVERTED RESIDUAL ══════ -->
+    <mxCell id="bg_ir_detail" value="Detail: InvertedResidual" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#F3E5F5;strokeColor=#9673A6;fontStyle=1;fontSize=11;verticalAlign=top;" vertex="1" parent="1">
+      <mxGeometry x="790" y="740" width="230" height="210" as="geometry"/>
+    </mxCell>
+    <mxCell id="ir_d1" value="Input x&lt;br&gt;↓" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=10;" vertex="1" parent="1">
+      <mxGeometry x="800" y="770" width="210" height="25" as="geometry"/>
+    </mxCell>
+    <mxCell id="ir_d2" value="1×1 Conv (expand ×t) + BN + ReLU6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#9673A6;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="798" y="793" width="214" height="32" as="geometry"/>
+    </mxCell>
+    <mxCell id="ir_d3" value="3×3 DWConv (stride=s) + BN + ReLU6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#9673A6;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="798" y="833" width="214" height="32" as="geometry"/>
+    </mxCell>
+    <mxCell id="ir_d4" value="1×1 Conv (project) + BN" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#9673A6;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="798" y="873" width="214" height="32" as="geometry"/>
+    </mxCell>
+    <mxCell id="ir_d5" value="+ x (skip, jika stride=1 &amp; dim sama)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="798" y="913" width="214" height="30" as="geometry"/>
+    </mxCell>
+
+    <!-- ══════ SEMUA PANAH UTAMA ══════ -->
+
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="n_input" target="n_conv1" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="n_conv1" target="bg_invres" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="bg_invres" target="n_conv2" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="n_conv2" target="bg_cbam" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="bg_cbam" target="n_temp" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="n_temp" target="n_gap" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="n_gap" target="n_drop" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="n_drop" target="n_fc" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="n_fc" target="n_out" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- Panah CBAM internal -->
+    <mxCell id="ec1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="cbam_ch" target="cbam_sp" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- Panah pointer ke detail boxes (dashed) -->
+    <mxCell id="ep1" value="lihat detail →" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;strokeColor=#D6B656;fontColor=#BF9000;fontSize=9;" edge="1" source="bg_invres" target="bg_tsm" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="ep2" value="lihat detail →" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;strokeColor=#9673A6;fontColor=#7030A0;fontSize=9;" edge="1" source="n_conv2" target="bg_ir_detail" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="ep3" value="lihat detail →" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;strokeColor=#7030A0;fontColor=#7030A0;fontSize=9;" edge="1" source="bg_cbam" target="bg_cbam_detail" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+  </root>
+</mxGraphModel>

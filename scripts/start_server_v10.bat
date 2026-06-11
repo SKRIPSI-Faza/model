@@ -1,6 +1,6 @@
 @echo off
 title SnapSign Flask API - v10 RGB (MobileNetV2+TSM+CBAM)
-cd /d "%~dp0"
+cd /d "%~dp0..\backend"
 echo ================================================
 echo   SnapSign Flask API - v10 RGB
 echo ================================================

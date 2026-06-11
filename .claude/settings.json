@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python realtime_test.py --checkpoint \"../v10_lighting/best_stage2_v10.pth\" --video \"../Dataset Kata/0/signer0_label0_sample1.mp4\" --device cpu)",
+      "Bash(grep -vE \"WARNING|warn|UserWarning|tensorflow|tflite|INFO:|W0|I0|^\\\\s*$\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('realtime_v10.py',encoding='utf-8'\\).read\\(\\)\\); print\\('OK: sintaks valid'\\)\")",
+      "Bash(python -c \"import torch; m=torch.load\\('best_stage2_v10.pth',map_location='cpu'\\); print\\('state_dict keys:', len\\(m\\)\\)\")",
+      "Bash(python -c ' *)",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('realtime_v10.py',encoding='utf-8'\\).read\\(\\)\\); print\\('OK'\\)\")",
+      "Bash(echo \"=== cari server Flask di seluruh project \\(d:\\\\\\\\\\) ===\")",
+      "Bash(find /d -maxdepth 3 \\\\\\( -iname \"app.py\" -o -iname \"server.py\" -o -iname \"*flask*.py\" -o -iname \"api*.py\" \\\\\\))",
+      "Bash(python -c \"import flask; print\\('flask', flask.__version__\\)\")",
+      "Bash(python -c \"import flask_cors; print\\('flask_cors OK'\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('server_v10.py',encoding='utf-8'\\).read\\(\\)\\); print\\('server_v10.py sintaks OK'\\)\")"
+    ]
+  }
+}
