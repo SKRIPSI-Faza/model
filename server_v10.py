@@ -55,9 +55,20 @@ _hands   = mp.solutions.hands.Hands(static_image_mode=True, max_num_hands=2,
 _dilate_k = np.ones((R.MASK_DILATE, R.MASK_DILATE), np.uint8)
 
 
+def center_crop_square(bgr):
+    """Crop tengah frame jadi square sebelum resize 224×224.
+    Agar frame portrait (mobile) dan landscape (webcam) punya proporsi sama."""
+    h, w = bgr.shape[:2]
+    s = min(h, w)
+    y0 = (h - s) // 2
+    x0 = (w - s) // 2
+    return bgr[y0:y0+s, x0:x0+s]
+
+
 def segment_frame(bgr, mode='blur'):
-    """Selfie segmentation + refine (tanpa temporal smoothing — server stateless
-    per-frame). Return (frame_tersegmentasi, coverage_mask 0..1)."""
+    """Selfie segmentation + refine. Center-crop ke square dulu agar proporsi
+    konsisten antara frame portrait (mobile) dan landscape (webcam)."""
+    bgr = center_crop_square(bgr)
     rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
     with _mp_lock:
         mask = _selfie.process(rgb).segmentation_mask
@@ -98,12 +109,16 @@ _LIGHT = 'none'; _MODE = 'blur'
 _last_montage_jpg: bytes = b''
 _last_montage_lock = threading.Lock()
 
+CONF_THRESHOLD = 22.0   # % minimum agar prediksi dianggap valid
+
 def predict_clip(frames224):
     """list frame BGR 224 tersegmentasi -> (label, conf_pct, top3[[label,frac]])."""
     global _last_montage_jpg
     if len(frames224) < 4:
         return "Tidak terdeteksi", 0.0, []
     src, peak = R.trim_active(frames224)
+    if peak < 0.5:                          # hampir tidak ada gerakan
+        return "Tidak terdeteksi", 0.0, []
     f16 = R.sample_clip_eval(src, R.NUM_FRAMES, 0.15)
     x = R.frames_to_tensor(f16, _DEVICE)
     with torch.inference_mode():
@@ -112,6 +127,8 @@ def predict_clip(frames224):
     top3  = [[_CLASSES[i], round(float(probs[i]), 4)] for i in order]
     label = _CLASSES[order[0]]
     conf  = float(probs[order[0]]) * 100.0
+    if conf < CONF_THRESHOLD:
+        return "Belum dikenali", conf, top3
 
     # ── Montage 16 frame di memory (buka /preview di browser) ────────────
     try:
