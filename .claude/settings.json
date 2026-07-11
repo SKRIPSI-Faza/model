@@ -11,7 +11,10 @@
       "Bash(find /d -maxdepth 3 \\\\\\( -iname \"app.py\" -o -iname \"server.py\" -o -iname \"*flask*.py\" -o -iname \"api*.py\" \\\\\\))",
       "Bash(python -c \"import flask; print\\('flask', flask.__version__\\)\")",
       "Bash(python -c \"import flask_cors; print\\('flask_cors OK'\\)\")",
-      "Bash(python -c \"import ast; ast.parse\\(open\\('server_v10.py',encoding='utf-8'\\).read\\(\\)\\); print\\('server_v10.py sintaks OK'\\)\")"
+      "Bash(python -c \"import ast; ast.parse\\(open\\('server_v10.py',encoding='utf-8'\\).read\\(\\)\\); print\\('server_v10.py sintaks OK'\\)\")",
+      "Bash(tasklist //FI \"IMAGENAME eq java.exe\" //FO CSV)",
+      "Bash(tasklist //FI \"IMAGENAME eq dart.exe\" //FO CSV)",
+      "Bash(powershell -Command \"Get-Counter '\\\\Processor\\(_Total\\)\\\\% Processor Time' -MaxSamples 1\")"
     ]
   }
 }

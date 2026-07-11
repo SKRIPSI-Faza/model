@@ -288,7 +288,8 @@ def load_model(path, device):
 # Main: siklus rekam + thread inferensi 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--checkpoint', default='best_stage2_v10.pth')
+    _here = os.path.dirname(os.path.abspath(__file__))
+    ap.add_argument('--checkpoint', default=os.path.join(_here, 'best_stage2_v10.pth'))
     ap.add_argument('--camera', type=int, default=0)
     ap.add_argument('--mode', choices=['blur', 'black'], default='blur')
     ap.add_argument('--light', choices=['none', 'clahe', 'gray', 'clahe+gray'], default='none')

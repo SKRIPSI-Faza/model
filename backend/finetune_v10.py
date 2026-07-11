@@ -16,7 +16,7 @@ Output: best_finetune_v10.pth  → pakai di realtime:
     python realtime_v10.py --checkpoint best_finetune_v10.pth --camera 0
 """
 
-import os, sys, argparse, random
+import os, sys, argparse, random, time
 import numpy as np
 import cv2
 import torch
@@ -112,14 +112,27 @@ def main():
         sys.exit(1)
     print(f'Total {len(X)} klip dari {len(set(y))} kelas.')
 
-    # split train/val (stratified sederhana)
-    idx = list(range(len(X))); random.shuffle(idx)
-    n_val = max(1, int(len(idx) * args.val_frac))
-    val_idx, tr_idx = set(idx[:n_val]), idx[n_val:]
+    # split train/val STRATIFIED per kelas (setiap kelas dipecah sendiri lalu
+    # digabung), menjamin tiap kelas terwakili proporsional di val set --
+    # beda dari shuffle global yang bisa membuat satu kelas kebagian 0 sampel.
+    from collections import defaultdict
+    cls_buckets = defaultdict(list)
+    for i, label in enumerate(y):
+        cls_buckets[label].append(i)
+    val_idx, tr_idx = [], []
+    for label_idx in sorted(cls_buckets):
+        bucket = cls_buckets[label_idx][:]
+        random.shuffle(bucket)
+        n_val_cls = max(1, int(len(bucket) * args.val_frac))
+        val_idx.extend(bucket[:n_val_cls])
+        tr_idx.extend(bucket[n_val_cls:])
     tr = ClipDataset([X[i] for i in tr_idx], [y[i] for i in tr_idx], train=True)
     va = ClipDataset([X[i] for i in val_idx], [y[i] for i in val_idx], train=False)
     tl = DataLoader(tr, args.batch, shuffle=True)
     vl = DataLoader(va, args.batch, shuffle=False)
+
+    if device.type == 'cpu':
+        torch.set_num_threads(max(1, os.cpu_count() or 1))
 
     # Bekukan backbone; latih hanya cbam + reduce + classifier
     for p in model.features.parameters():
@@ -127,29 +140,41 @@ def main():
     trainable = [p for p in model.parameters() if p.requires_grad]
     print(f'Parameter dilatih: {sum(p.numel() for p in trainable):,}')
 
+    def set_train_mode():
+        # model.train() saja akan ikut membuat BatchNorm di backbone beku
+        # memperbarui running mean/var meski bobotnya tidak di-update --
+        # backbone harus tetap eval() supaya statistik BN-nya benar terkunci.
+        model.train()
+        model.features.eval()
+
     crit = nn.CrossEntropyLoss(label_smoothing=0.1)
     opt = optim.AdamW(trainable, lr=args.lr, weight_decay=1e-3)
     best_val, best_state = 0.0, None
+    n_batch = len(tl)
 
     for ep in range(1, args.epochs + 1):
-        model.train(); tr_correct = tr_n = 0; tr_loss = 0.0
-        for xb, yb in tl:
-            xb, yb = xb.to(device), torch.tensor(yb).to(device)
+        set_train_mode(); tr_correct = tr_n = 0; tr_loss = 0.0
+        t_ep = time.time()
+        for bi, (xb, yb) in enumerate(tl, 1):
+            xb, yb = xb.to(device), yb.to(device)
             opt.zero_grad()
             out = model(xb); loss = crit(out, yb)
             loss.backward(); opt.step()
             tr_loss += loss.item() * xb.size(0)
             tr_correct += (out.argmax(1) == yb).sum().item(); tr_n += xb.size(0)
+            print(f'  Ep {ep:02d} batch {bi}/{n_batch} loss={tr_loss/max(tr_n,1):.3f}',
+                  end='\r', flush=True)
 
         model.eval(); va_correct = va_n = 0
         with torch.no_grad():
             for xb, yb in vl:
-                xb, yb = xb.to(device), torch.tensor(yb).to(device)
+                xb, yb = xb.to(device), yb.to(device)
                 out = model(xb)
                 va_correct += (out.argmax(1) == yb).sum().item(); va_n += xb.size(0)
         va_acc = va_correct / max(va_n, 1)
         print(f'Ep {ep:02d} | train_loss={tr_loss/max(tr_n,1):.3f} '
-              f'train_acc={tr_correct/max(tr_n,1):.3f} | val_acc={va_acc:.3f}')
+              f'train_acc={tr_correct/max(tr_n,1):.3f} | val_acc={va_acc:.3f} '
+              f'| {time.time()-t_ep:.0f}s/epoch')
         if va_acc >= best_val:
             best_val = va_acc
             best_state = {k: v.cpu().clone() for k, v in model.state_dict().items()}

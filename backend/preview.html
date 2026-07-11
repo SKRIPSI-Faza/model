@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SnapSign Preview</title>
+<style>
+  body{margin:0;background:#111;color:#aaa;font-family:sans-serif;
+       display:flex;flex-direction:column;align-items:center}
+  #status{padding:6px;font-size:13px}
+  img{max-width:100vw;max-height:92vh}
+</style>
+</head>
+<body>
+<div id="status">menunggu prediksi pertama...</div>
+<img id="m" alt="">
+<script>
+const img = document.getElementById('m'), st = document.getElementById('status');
+function tick(){
+  const pre = new Image();
+  pre.onload = () => {                       // swap hanya setelah termuat -> tanpa kedip
+    img.src = pre.src;
+    st.textContent = 'update: ' + new Date().toLocaleTimeString();
+  };
+  pre.onerror = () => {};                    // 204/belum ada montage -> biarkan
+  pre.src = '/preview.jpg?t=' + Date.now();  // cache-buster
+}
+tick(); setInterval(tick, 1500);
+</script>
+</body>
+</html>
